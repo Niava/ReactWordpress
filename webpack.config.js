@@ -2,21 +2,25 @@ var MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 var path = require('path');
 
+
 module.exports = {
+    
     entry: {
-        app: './src/index.jsx'
+        app: './src/index.jsx',
+        main: [
+			'./src/app.js',
+			'./src/css/app.scss'
+    	]
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'main.js'
+        filename: '[name].bundle.js'
     },
     plugins: [
         new MiniCssExtractPlugin({
-        // Options similar to the same options in webpackOptions.output
-        // all options are optional
-        filename: 'style.scss',
-        chunkFilename: 'main.scss',
-        ignoreOrder: false, // Enable to remove warnings about conflicting order
+            filename: 'style.scss',
+            chunkFilename: '[Id].scss',
+            ignoreOrder: false, // Enable to remove warnings about conflicting order
         }),
     ],
     module: {
@@ -37,10 +41,24 @@ module.exports = {
                 ],
             },
             {
-                test: /\.jsx?$/,
-                exclude: /node_modules/,
-                use: 'babel-loader'
-            },
+				test: /\.(js|jsx|tsx|ts)$/,
+				exclude:path.resolve(__dirname, 'node_modules'),
+				use: {
+				loader: 'babel-loader',
+				options: {
+					presets: [
+							'@babel/preset-env',
+							'@babel/preset-react',
+							'@babel/preset-typescript'
+						],
+						plugins : [
+							["@babel/plugin-proposal-decorators", { "legacy": true }],
+							'@babel/plugin-syntax-dynamic-import',
+							['@babel/plugin-proposal-class-properties', { "loose": true }]
+						]
+					}
+				},
+			},
             {
                 test: /\.(jpe?g|png|gif|svg)$/i,
                 use: [
@@ -59,6 +77,14 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: ['.js', '.jsx']
-    }
+        extensions: ['.js', '.jsx', '.json', '.ts', '.tsx']
+    },
+    devServer: {
+        contentBase: path.join(__dirname, '/'),
+        publicPath: '/dist/',
+        watchContentBase: true
+    },
+    watch: true,
+    mode:'development'
 }
+

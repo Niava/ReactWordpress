@@ -12,12 +12,14 @@ class App extends Component {
         return(
             <div id="page-inner">
                 <Header />
+                <div className="leah"></div>
                 <div id="content">
+                    <div className="leah"></div>
                     <Switch>
-                        <Route exact path={CelestialSettings.path} component={Posts} />
-                        <Route exact path={CelestialSettings.path + 'posts/:slug'} component={Post} />
-                        <Route exact path={CelestialSettings.path + 'products'} component={Products} />
-                        <Route exact path={CelestialSettings.path + 'products/:product'} component={Product} />
+                        <Route exact path={nexusSettings.path} component={Posts} />
+                        <Route exact path={nexusSettings.path + 'posts/:slug'} component={Post} />
+                        <Route exact path={nexusSettings.path + 'products'} component={Products} />
+                        <Route exact path={nexusSettings.path + 'products/:product'} component={Product} />
                         <Route path="*" component={NotFound} />
                     </Switch>
                 </div>
@@ -37,5 +39,5 @@ const routes = (
 
 
 ReactDOM.render(
-    {routes}, document.querySelector('#page')
+    {routes}, document.querySelector('#app')
 );
